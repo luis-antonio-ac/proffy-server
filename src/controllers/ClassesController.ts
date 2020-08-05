@@ -1,4 +1,4 @@
-import { Request, Response } from 'express'
+import { Request, Response} from 'express'
 import { db } from '../database/connection'
 import { convertHourToMinutes } from '../utils/convertHourToMinutes'
 
@@ -9,6 +9,37 @@ interface ScheduleItem {
 }
 
 class ClassesController {
+    async index(request: Request, response: Response) {
+        const filters = request.query
+
+        const subject = filters.subject as string
+        const week_day = filters.week_day as string
+        const time = filters.time as string
+
+        if(!filters.week_day || !filters.subject || !filters.time) {
+            return response.status(400).json({
+                error: 'Missing filters to search classes'
+            })
+        }
+
+        const timeInMinutes = convertHourToMinutes(time)  
+        
+        const classes = await db('classes')
+            .whereExists(function () {
+                this.select('classes_schedule.*')
+                    .from('classes_schedule')
+                    .whereRaw('`classes_schedule`.`class_id` = `classes`.`id`')
+                    .whereRaw('`classes_schedule`.`week_day` = ??', [Number(week_day)])
+                    .whereRaw('`classes_schedule`.`from` <= ??', [timeInMinutes])
+                    .whereRaw('`classes_schedule`.`to` > ??', [timeInMinutes])
+            })
+            .where('classes.subject', '=', subject)
+            .join('users', 'classes.user_id', '=', 'users.id')
+            .select(['classes.*', 'users.*'])
+
+        return response.json(classes)
+    }
+
     async create(request: Request, response: Response) {
         const { 
             name,
