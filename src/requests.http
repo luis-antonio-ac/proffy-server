@@ -2,11 +2,11 @@ POST http://localhost:3333/classes
 Content-Type: application/json
 
 {
-    "name": "Tonhao",
+    "name": "Luis Antonio",
     "avatar": "https://avatars1.githubusercontent.com/u/35160032?s=460&u=c2fd8dd4d7356247dafc16dc5ac823721b7bc9bd&v=4",
     "whatsapp": "+556892065657",
     "bio": "Desenvolvedor Web com 4 anos de mercado",
-    "subject": "Matemática",
+    "subject": "Redação",
     "cost": 100,
     "schedule": [
         {"week_day": 1, "from": "8:00", "to": "12:00"},
