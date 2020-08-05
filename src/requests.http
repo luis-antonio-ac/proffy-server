@@ -15,4 +15,15 @@ Content-Type: application/json
 }
 
 ###
-GET http://localhost:3333/classes?week_day=1&subject=Matemática&time=8:00
+GET http://localhost:3333/classes?week_day=4&subject=Redação&time=9:00
+
+###
+POST http://localhost:3333/connections
+Content-Type: application/json
+
+{
+    "user_id": 1
+}
+
+###
+GET http://localhost:3333/connections
